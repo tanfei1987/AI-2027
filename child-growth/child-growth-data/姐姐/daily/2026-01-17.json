@@ -1,0 +1,31 @@
+{
+  "life": {
+    "highlights": "早上起的早，会自己刷牙、洗脸；帮助弟弟弄牙膏；会帮助做家务，对于不到7岁的小朋友很难得了",
+    "concerns": "",
+    "mood": "好"
+  },
+  "health": {
+    "highlights": "下午去外面骑车3个小时，体力充沛",
+    "concerns": "",
+    "exercise": "骑车3小时",
+    "sleep": "好，8点半就睡了"
+  },
+  "study": {
+    "highlights": "语文和英语学习表现还行；自己自觉的写作业，晚上按时完成作业",
+    "concerns": "数学逻辑还差点",
+    "homework": "按时完成",
+    "progress": "正常"
+  },
+  "social": {
+    "highlights": "帮助弟弟弄牙膏",
+    "concerns": "",
+    "friends": "",
+    "family": "帮助家人做家务"
+  },
+  "growth": {
+    "highlights": "生活自理能力强；会主动帮助家人做家务",
+    "concerns": "不会自己发现自己的爱好和乐趣，这一点不如弟弟",
+    "milestones": "不到7岁会主动帮助做家务，非常难得",
+    "improvements": ""
+  }
+}
