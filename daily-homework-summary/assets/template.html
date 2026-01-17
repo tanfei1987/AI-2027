@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日作业汇总 - {{DATE}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --math-primary: #3B82F6;
+            --math-light: #EFF6FF;
+            --math-dark: #1E40AF;
+            --chinese-primary: #10B981;
+            --chinese-light: #ECFDF5;
+            --chinese-dark: #047857;
+            --english-primary: #8B5CF6;
+            --english-light: #F5F3FF;
+            --english-dark: #5B21B6;
+            --important: #F59E0B;
+            --important-light: #FEF3C7;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --bg-main: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --border-color: #E5E7EB;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* 页面头部 */
+        .header {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--math-primary), var(--chinese-primary), var(--english-primary));
+        }
+
+        .header-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .header-meta {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-main);
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .meta-item .icon {
+            font-size: 16px;
+        }
+
+        /* 科目卡片 */
+        .subject-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .subject-header {
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .subject-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .subject-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .subject-count {
+            margin-left: auto;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* 数学样式 */
+        .subject-math .subject-header {
+            background: linear-gradient(135deg, var(--math-light) 0%, #DBEAFE 100%);
+            border-bottom: 2px solid var(--math-primary);
+        }
+        .subject-math .subject-icon {
+            background: var(--math-primary);
+            color: white;
+        }
+        .subject-math .subject-title {
+            color: var(--math-dark);
+        }
+        .subject-math .subject-count {
+            background: var(--math-primary);
+            color: white;
+        }
+
+        /* 语文样式 */
+        .subject-chinese .subject-header {
+            background: linear-gradient(135deg, var(--chinese-light) 0%, #D1FAE5 100%);
+            border-bottom: 2px solid var(--chinese-primary);
+        }
+        .subject-chinese .subject-icon {
+            background: var(--chinese-primary);
+            color: white;
+        }
+        .subject-chinese .subject-title {
+            color: var(--chinese-dark);
+        }
+        .subject-chinese .subject-count {
+            background: var(--chinese-primary);
+            color: white;
+        }
+
+        /* 英文样式 */
+        .subject-english .subject-header {
+            background: linear-gradient(135deg, var(--english-light) 0%, #EDE9FE 100%);
+            border-bottom: 2px solid var(--english-primary);
+        }
+        .subject-english .subject-icon {
+            background: var(--english-primary);
+            color: white;
+        }
+        .subject-english .subject-title {
+            color: var(--english-dark);
+        }
+        .subject-english .subject-count {
+            background: var(--english-primary);
+            color: white;
+        }
+
+        /* 作业项 */
+        .homework-list {
+            padding: 16px 24px 24px;
+        }
+
+        /* 课堂内容区域 */
+        .class-content {
+            margin-bottom: 20px;
+        }
+
+        .content-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-box {
+            background: linear-gradient(135deg, #FEFCE8 0%, #FEF9C3 100%);
+            border-radius: 10px;
+            padding: 16px;
+            border-left: 4px solid #EAB308;
+        }
+
+        .content-item {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .content-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .content-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-right: 6px;
+        }
+
+        /* 练习题详解区域 (新增) */
+        .practice-detail {
+            margin-top: 16px;
+            background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+            border-radius: 10px;
+            padding: 16px;
+            border-left: 4px solid #F97316;
+        }
+
+        .practice-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #EA580C;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .example-question {
+            background: white;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .example-question:last-child {
+            margin-bottom: 0;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #F97316;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .question-content {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #FEF3C7;
+            border-radius: 6px;
+        }
+
+        .solution-steps {
+            margin-top: 10px;
+        }
+
+        .solution-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #059669;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .solution-steps ol {
+            margin: 8px 0 8px 20px;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        .solution-steps li {
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+        }
+
+        .mistakes-box {
+            margin-top: 10px;
+            background: #FEF2F2;
+            border-radius: 6px;
+            padding: 10px;
+            border-left: 3px solid #DC2626;
+        }
+
+        .mistakes-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #DC2626;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .mistakes-box ul {
+            margin: 6px 0 0 20px;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        .mistakes-box li {
+            margin-bottom: 4px;
+            color: #991B1B;
+        }
+
+        .answer-box {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #ECFDF5;
+            border-radius: 6px;
+            border-left: 3px solid #059669;
+        }
+
+        .answer-label {
+            font-weight: 600;
+            color: #047857;
+            margin-right: 6px;
+        }
+
+        .answer-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #065F46;
+        }
+
+        /* 作业表格 */
+        .homework-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        .homework-table thead {
+            background: var(--bg-main);
+        }
+
+        .homework-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .homework-table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        .homework-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .homework-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        .homework-table tbody tr:hover {
+            background: var(--bg-main);
+        }
+
+        .homework-table tbody tr.priority-high {
+            background: var(--important-light);
+        }
+
+        .homework-table tbody tr.priority-high:hover {
+            background: #FDE68A;
+        }
+
+        .homework-table tbody tr.priority-medium {
+            background: #F0FDF4;
+        }
+
+        .homework-table tbody tr.priority-medium:hover {
+            background: #DCFCE7;
+        }
+
+        .homework-table tbody tr.priority-low {
+            background: var(--bg-main);
+        }
+
+        .task-number {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .task-desc {
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .priority-badge.high {
+            background: var(--important);
+            color: white;
+        }
+
+        .priority-badge.medium {
+            background: #10B981;
+            color: white;
+        }
+
+        .priority-badge.low {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .completion-steps {
+            margin: 0;
+            padding-left: 18px;
+            list-style: disc;
+        }
+
+        .completion-steps li {
+            margin-bottom: 6px;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+
+        .completion-steps li:last-child {
+            margin-bottom: 0;
+        }
+
+        .book-info {
+            line-height: 1.6;
+        }
+
+        .book-info div {
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .book-info div:last-child {
+            margin-bottom: 0;
+        }
+
+        .book-info strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .homework-item {
+            background: var(--bg-main);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .homework-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .homework-item:hover {
+            background: #F3F4F6;
+        }
+
+        .homework-item.priority-1 {
+            border-left-color: var(--important);
+            background: var(--important-light);
+        }
+
+        .homework-item.priority-1:hover {
+            background: #FDE68A;
+        }
+
+        .item-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: var(--important);
+            color: white;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .item-header h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .item-details {
+            display: grid;
+            gap: 10px;
+        }
+
+        .detail-section {
+            padding: 12px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-section .label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .detail-section p {
+            font-size: 14px;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* 打印样式 */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .subject-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid var(--border-color);
+            }
+            .subject-card:hover {
+                transform: none;
+            }
+        }
+
+        /* 响应式 */
+        @media (max-width: 640px) {
+            body {
+                padding: 12px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 22px;
+            }
+            .header-meta {
+                gap: 12px;
+            }
+            .subject-header {
+                padding: 16px;
+            }
+            .homework-list {
+                padding: 12px 16px 16px;
+            }
+
+            /* 表格响应式 */
+            .homework-table {
+                font-size: 13px;
+            }
+
+            .homework-table thead {
+                display: none;
+            }
+
+            .homework-table, .homework-table tbody, .homework-table tr, .homework-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .homework-table tr {
+                margin-bottom: 20px;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                overflow: hidden;
+            }
+
+            .homework-table td {
+                padding: 12px;
+                border-bottom: 1px solid var(--border-color);
+                position: relative;
+                padding-left: 50%;
+            }
+
+            .homework-table td:last-child {
+                border-bottom: none;
+            }
+
+            .homework-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 12px;
+                top: 12px;
+                font-weight: 600;
+                color: var(--text-secondary);
+                white-space: nowrap;
+            }
+
+            .content-box {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 页面头部 -->
+        <div class="header">
+            <div class="header-icon">📚</div>
+            <h1>每日作业汇总</h1>
+            <div class="header-meta">
+                <div class="meta-item">
+                    <span class="icon">📅</span>
+                    <span>{{DATE}}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="icon">🎒</span>
+                    <span>{{GRADE}}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="icon">📍</span>
+                    <span>江西省南昌市</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数学作业 -->
+        <div class="subject-card subject-math">
+            <div class="subject-header">
+                <div class="subject-icon">📐</div>
+                <h2 class="subject-title">数学作业</h2>
+                <span class="subject-count">{{MATH_COUNT}}项任务</span>
+            </div>
+            <div class="homework-list">
+                <!-- 课堂内容 -->
+                {{MATH_CLASS_CONTENT}}
+                
+                <!-- 练习题详解 (新增) -->
+                {{MATH_PRACTICE_DETAIL}}
+                
+                <!-- 作业表格 -->
+                {{MATH_ITEMS}}
+            </div>
+        </div>
+
+        <!-- 语文作业 -->
+        <div class="subject-card subject-chinese">
+            <div class="subject-header">
+                <div class="subject-icon">📝</div>
+                <h2 class="subject-title">语文作业</h2>
+                <span class="subject-count">{{CHINESE_COUNT}}项任务</span>
+            </div>
+            <div class="homework-list">
+                <!-- 课堂内容 -->
+                {{CHINESE_CLASS_CONTENT}}
+                
+                <!-- 练习题详解 (新增) -->
+                {{CHINESE_PRACTICE_DETAIL}}
+                
+                <!-- 作业表格 -->
+                {{CHINESE_ITEMS}}
+            </div>
+        </div>
+
+        <!-- 英文作业 -->
+        <div class="subject-card subject-english">
+            <div class="subject-header">
+                <div class="subject-icon">🔤</div>
+                <h2 class="subject-title">英文作业</h2>
+                <span class="subject-count">{{ENGLISH_COUNT}}项任务</span>
+            </div>
+            <div class="homework-list">
+                <!-- 课堂内容 -->
+                {{ENGLISH_CLASS_CONTENT}}
+                
+                <!-- 练习题详解 (新增) -->
+                {{ENGLISH_PRACTICE_DETAIL}}
+                
+                <!-- 作业表格 -->
+                {{ENGLISH_ITEMS}}
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="footer">
+            <p>📖 认真完成作业，每天进步一点点！加油！💪</p>
+        </div>
+    </div>
+</body>
+</html>

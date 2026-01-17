@@ -1,0 +1,5 @@
+# 每日作业汇总技能依赖
+# Email and QR Code generation
+
+qrcode>=7.3.1
+Pillow>=9.0.0

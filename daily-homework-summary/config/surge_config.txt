@@ -1,0 +1,17 @@
+# Surge.sh 配置文件
+# 
+# 说明：
+# - 此文件包含 surge 部署的账号信息
+# - 用于自动登录 surge.sh
+# - 请妥善保管此文件，不要分享给他人
+#
+# 配置时间：2026-01-09
+
+[surge]
+email = tanfeideshouji@163.com
+password = tanfei123456
+
+# 说明：
+# - email: surge 账号邮箱
+# - password: surge 账号密码
+# - 首次使用会自动登录
