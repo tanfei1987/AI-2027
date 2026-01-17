@@ -85,7 +85,7 @@ cd child-growth && node child-growth-log-ui.js list daily 弟弟
 
 ### daily-homework-summary
 
-每日作业汇总技能 - 为江西省南昌市小学一年级学生创建每日作业汇总HTML页面
+每日作业汇总技能 - 为小学一年级学生创建每日作业汇总HTML页面
 
 **触发词**：作业、每日作业、作业汇总、今日作业、homework、功课、布置作业
 
